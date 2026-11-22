@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
+import 'repositories/auth_repository.dart';
 import 'screens/dobradura_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,18 +15,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'App Dobraduras',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (_) => AuthProvider(AuthRepository()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'App Dobraduras',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: '/home',
+        routes: {
+          '/home': (context) => HomeScreen(),
+          '/dobradura': (context) => DobraduraScreen(),
+          '/login': (context) => const LoginScreen(),
+        },
       ),
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => HomeScreen(),
-        '/dobradura': (context) => DobraduraScreen(),
-      },
     );
   }
 }
