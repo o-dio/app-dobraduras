@@ -16,12 +16,7 @@ class HomeScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppHeader(
-        titulo: 'Início',
-        onSearchPressed: () {
-          // TODO: abrir menu de pesquisa na próxima etapa
-        },
-      ),
+      appBar: const AppHeader(titulo: 'Início'),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 24),
         children: [

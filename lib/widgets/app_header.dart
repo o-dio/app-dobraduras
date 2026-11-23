@@ -20,6 +20,20 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     return ModalRoute.of(context)?.settings.name == '/home';
   }
 
+  bool _estaNaBusca(BuildContext context) {
+    return ModalRoute.of(context)?.settings.name == '/busca';
+  }
+
+  void _aoClicarNaBusca(BuildContext context) {
+    if (onSearchPressed != null) {
+      onSearchPressed!();
+      return;
+    }
+    if (!_estaNaBusca(context)) {
+      Navigator.pushNamed(context, '/busca');
+    }
+  }
+
   void _aoClicarNoLogo(BuildContext context) {
     if (_estaNaHome(context)) {
       // Na /home, clique simples recarrega a página inicial
@@ -93,13 +107,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      // 3. Ação de pesquisa (abrirá o menu de pesquisa)
+      // 3. Ação de pesquisa (oculta quando já estiver na tela /busca)
       actions: [
-        IconButton(
-          icon: const Icon(Icons.search),
-          tooltip: 'Pesquisar',
-          onPressed: onSearchPressed,
-        ),
+        if (!_estaNaBusca(context))
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Pesquisar',
+            onPressed: () => _aoClicarNaBusca(context),
+          ),
       ],
     );
   }

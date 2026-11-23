@@ -97,4 +97,52 @@ class DobraduraRepository {
     }
     return null;
   }
+
+  /// Retorna os tipos únicos de dobraduras ordenados alfabeticamente (para filtros).
+  List<String> listarTipos() {
+    final tipos = listarTodas().map((d) => d.tipo).toSet().toList();
+    tipos.sort();
+    return tipos;
+  }
+
+  /// Filtra dobraduras por [termo] e filtros combináveis.
+  ///
+  /// Dentro de cada grupo de filtro aplica-se lógica OU (ex.: Fácil OU Difícil).
+  /// Entre grupos distintos (e o termo textual) aplica-se lógica E.
+  List<Dobradura> buscar({
+    String termo = '',
+    Set<String> tipos = const {},
+    Set<DificuldadeDobradura> dificuldades = const {},
+    Set<EstruturaDobradura> estruturas = const {},
+    Set<TipoInstrucao> instrucoes = const {},
+  }) {
+    final termoNormalizado = termo.trim().toLowerCase();
+
+    return listarTodas().where((dobradura) {
+      if (termoNormalizado.isNotEmpty) {
+        final bateNome = dobradura.nome.toLowerCase().contains(termoNormalizado);
+        final bateTipo = dobradura.tipo.toLowerCase().contains(termoNormalizado);
+        if (!bateNome && !bateTipo) return false;
+      }
+
+      if (tipos.isNotEmpty && !tipos.contains(dobradura.tipo)) {
+        return false;
+      }
+
+      if (dificuldades.isNotEmpty && !dificuldades.contains(dobradura.dificuldade)) {
+        return false;
+      }
+
+      if (estruturas.isNotEmpty && !estruturas.contains(dobradura.estrutura)) {
+        return false;
+      }
+
+      if (instrucoes.isNotEmpty &&
+          !instrucoes.any((i) => dobradura.instrucoesDisponiveis.contains(i))) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
 }

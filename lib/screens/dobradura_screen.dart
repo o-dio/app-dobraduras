@@ -31,12 +31,7 @@ class DobraduraScreen extends StatelessWidget {
 
     if (dobradura == null) {
       return Scaffold(
-        appBar: AppHeader(
-          titulo: 'Dobradura',
-          onSearchPressed: () {
-            // TODO: abrir menu de pesquisa na próxima etapa
-          },
-        ),
+        appBar: const AppHeader(titulo: 'Dobradura'),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(24),
@@ -68,12 +63,7 @@ class DobraduraScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppHeader(
-        titulo: dobradura.nome,
-        onSearchPressed: () {
-          // TODO: abrir menu de pesquisa na próxima etapa
-        },
-      ),
+      appBar: AppHeader(titulo: dobradura.nome),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
