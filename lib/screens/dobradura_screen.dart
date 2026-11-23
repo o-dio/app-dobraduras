@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../models/dobradura.dart';
 import '../repositories/dobradura_repository.dart';
+import '../widgets/algoritmo_dialog.dart';
 import '../widgets/app_header.dart';
 import '../widgets/dobradura_info_card.dart';
 import '../widgets/dobradura_passo_a_passo.dart';
@@ -14,19 +16,10 @@ class DobraduraScreen extends StatelessWidget {
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 
-  void _abrirPopupAlgoritmo(BuildContext context, String nomeDobradura) {
+  void _abrirPopupAlgoritmo(BuildContext context, Dobradura dobradura) {
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Algoritmo'),
-        content: Text('Visualização do algoritmo de "$nomeDobradura" em breve.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
-          ),
-        ],
-      ),
+      builder: (context) => AlgoritmoDialog(dobradura: dobradura),
     );
   }
 
@@ -87,7 +80,7 @@ class DobraduraScreen extends StatelessWidget {
           // Seção 1: Informações gerais
           DobraduraInfoCard(
             dobradura: dobradura,
-            onAlgoritmoPressed: () => _abrirPopupAlgoritmo(context, dobradura.nome),
+            onAlgoritmoPressed: () => _abrirPopupAlgoritmo(context, dobradura),
           ),
           const SizedBox(height: 24),
           // Seção 2: Passo-a-passo

@@ -56,7 +56,14 @@ class DobraduraInfoCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Dificuldade: ${dobradura.dificuldade}',
+                    dobradura.dificuldade.label,
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Estrutura: ${dobradura.estrutura.label}',
                     style: textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),

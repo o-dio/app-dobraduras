@@ -10,24 +10,35 @@ class DobraduraRepository {
         id: 'tsuru',
         nome: 'Tsuru',
         tipo: 'Animais',
-        dificuldade: 'Intermediário',
+        dificuldade: DificuldadeDobradura.intermediario,
+        estrutura: EstruturaDobradura.simples,
         imagensPasso: ['mock://tsuru/passo-1', 'mock://tsuru/passo-2', 'mock://tsuru/passo-3'],
         videoPassoUrl: 'mock://tsuru/video',
+        algoritmo: '''1. Comece com um papel quadrado.
+2. Dobre ao meio nas duas diagonais e desdobre.
+3. Forme a base quadrada juntando as pontas.
+4. Dobre as abas laterais até o centro e puxe a base pássaro.
+5. Modele a cabeça, a cauda e abra as asas.''',
       ),
       // Cenário 2: somente imagens
       Dobradura(
         id: 'sapo',
         nome: 'Sapo Saltador',
         tipo: 'Animais',
-        dificuldade: 'Fácil',
+        dificuldade: DificuldadeDobradura.facil,
+        estrutura: EstruturaDobradura.simples,
         imagensPasso: ['mock://sapo/passo-1', 'mock://sapo/passo-2'],
+        algoritmo: '''1. Dobre o papel ao meio formando um retângulo.
+2. Crie as dobras diagonais no topo para formar um triângulo.
+3. Dobre as pernas traseiras em zigue-zague para dar impulso.''',
       ),
       // Cenário 3: somente vídeo (vídeo oficial de teste do Flutter)
       Dobradura(
         id: 'raposa',
         nome: 'Raposa',
         tipo: 'Animais',
-        dificuldade: 'Fácil',
+        dificuldade: DificuldadeDobradura.facil,
+        estrutura: EstruturaDobradura.simples,
         videoPassoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
       ),
       // Cenário 4: sem passo-a-passo cadastrado
@@ -35,17 +46,31 @@ class DobraduraRepository {
         id: 'barquinho',
         nome: 'Barquinho de Papel',
         tipo: 'Veículos',
-        dificuldade: 'Fácil',
+        dificuldade: DificuldadeDobradura.facil,
+        estrutura: EstruturaDobradura.simples,
       ),
       Dobradura(
         id: 'aviao',
         nome: 'Avião Clássico',
         tipo: 'Veículos',
-        dificuldade: 'Fácil',
+        dificuldade: DificuldadeDobradura.facil,
+        estrutura: EstruturaDobradura.simples,
         imagensPasso: ['mock://aviao/passo-1'],
       ),
-      Dobradura(id: 'flor-lotus', nome: 'Flor de Lótus', tipo: 'Flores', dificuldade: 'Difícil'),
-      Dobradura(id: 'tulipa', nome: 'Tulipa', tipo: 'Flores', dificuldade: 'Fácil'),
+      Dobradura(
+        id: 'flor-lotus',
+        nome: 'Flor de Lótus',
+        tipo: 'Flores',
+        dificuldade: DificuldadeDobradura.dificil,
+        estrutura: EstruturaDobradura.modular,
+      ),
+      Dobradura(
+        id: 'tulipa',
+        nome: 'Tulipa',
+        tipo: 'Flores',
+        dificuldade: DificuldadeDobradura.facil,
+        estrutura: EstruturaDobradura.simples,
+      ),
     ];
   }
 
