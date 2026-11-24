@@ -38,7 +38,18 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'App Dobraduras',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+               seedColor: Color(0xFFD6AF55),
+              ).copyWith(
+              primary: Color(0xFF355C75),
+              secondary: Color(0xFF6D8797),
+              tertiary: Color(0xFFC49A3A),
+
+              onPrimary: Colors.white,
+              onSecondary: Colors.white,
+              onTertiary: Color(0xFF6D8797),
+          ), 
+          scaffoldBackgroundColor: Color(0xFFF5F3EB),
           useMaterial3: true,
         ),
         initialRoute: '/home',

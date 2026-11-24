@@ -98,10 +98,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           customBorder: const CircleBorder(),
           onTap: () => _aoClicarNoLogo(context),
           onDoubleTap: () => _aoDarDuploCliqueNoLogo(context),
-          child: Icon(
-            Icons.auto_awesome,
-            // Destaque discreto na cor primária quando o modo admin está ativo
-            color: isAdmin ? colorScheme.primary : null,
+          child: Image.asset(
+            'assets/images/logo_ultra_dahora.png',
+            
           ),
         ),
       ),
