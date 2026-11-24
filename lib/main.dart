@@ -7,6 +7,7 @@ import 'providers/dobradura_provider.dart';
 import 'repositories/auth_repository.dart';
 import 'repositories/dobradura_repository.dart';
 import 'screens/busca_screen.dart';
+import 'screens/dobradura_form_screen.dart';
 import 'screens/dobradura_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
           '/dobradura': (context) => const DobraduraScreen(),
           '/login': (context) => const LoginScreen(),
           '/busca': (context) => const BuscaScreen(),
+          '/admin/dobradura': (context) => const DobraduraFormScreen(),
         },
       ),
     );

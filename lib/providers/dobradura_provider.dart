@@ -94,6 +94,26 @@ class DobraduraProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Cria uma nova dobradura no Firestore e recarrega o catálogo em memória.
+  Future<String> adicionarDobradura(Dobradura dobradura) async {
+    final id = await _repository.criar(dobradura);
+    await carregarDobraduras();
+    return id;
+  }
+
+  /// Atualiza uma dobradura existente no Firestore e recarrega o catálogo.
+  Future<void> atualizarDobradura(Dobradura dobradura) async {
+    await _repository.atualizar(dobradura);
+    await carregarDobraduras();
+  }
+
+  /// Exclui uma dobradura no Firestore, limpa do histórico e recarrega o catálogo.
+  Future<void> excluirDobradura(String id) async {
+    await _repository.excluir(id);
+    _historicoIds.remove(id);
+    await carregarDobraduras();
+  }
+
   /// Filtra as dobraduras em memória por [termo] e filtros combináveis.
   ///
   /// Lógica OU dentro de cada categoria e lógica E entre categorias distintas.
