@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/dobradura.dart';
-import '../repositories/dobradura_repository.dart';
+import '../providers/dobradura_provider.dart';
 import '../widgets/app_header.dart';
 import '../widgets/dobradura_info_card.dart';
 
@@ -13,21 +14,12 @@ class BuscaScreen extends StatefulWidget {
 }
 
 class _BuscaScreenState extends State<BuscaScreen> {
-  final _repository = DobraduraRepository();
   final _termoController = TextEditingController();
-
-  late final List<String> _tiposDisponiveis;
 
   final Set<String> _tiposSelecionados = {};
   final Set<DificuldadeDobradura> _dificuldadesSelecionadas = {};
   final Set<EstruturaDobradura> _estruturasSelecionadas = {};
   final Set<TipoInstrucao> _instrucoesSelecionadas = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _tiposDisponiveis = _repository.listarTipos();
-  }
 
   @override
   void dispose() {
@@ -113,7 +105,9 @@ class _BuscaScreenState extends State<BuscaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final resultados = _repository.buscar(
+    final provider = context.watch<DobraduraProvider>();
+    final tiposDisponiveis = provider.tiposDisponiveis;
+    final resultados = provider.buscar(
       termo: _termoController.text,
       tipos: _tiposSelecionados,
       dificuldades: _dificuldadesSelecionadas,
@@ -171,7 +165,7 @@ class _BuscaScreenState extends State<BuscaScreen> {
             children: [
               _construirGrupoChips<String>(
                 titulo: 'Tipo',
-                opcoes: _tiposDisponiveis,
+                opcoes: tiposDisponiveis,
                 selecionados: _tiposSelecionados,
                 obterLabel: (tipo) => tipo,
               ),

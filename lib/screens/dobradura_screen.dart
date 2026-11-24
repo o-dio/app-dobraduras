@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/dobradura.dart';
-import '../repositories/dobradura_repository.dart';
+import '../providers/dobradura_provider.dart';
 import '../widgets/algoritmo_dialog.dart';
 import '../widgets/app_header.dart';
 import '../widgets/dobradura_info_card.dart';
 import '../widgets/dobradura_passo_a_passo.dart';
 
 /// Tela de detalhes de uma dobradura (informações gerais, passo-a-passo e modelo 3D).
-class DobraduraScreen extends StatelessWidget {
-  DobraduraScreen({super.key});
+class DobraduraScreen extends StatefulWidget {
+  const DobraduraScreen({super.key});
 
-  final _repository = DobraduraRepository();
+  @override
+  State<DobraduraScreen> createState() => _DobraduraScreenState();
+}
+
+class _DobraduraScreenState extends State<DobraduraScreen> {
+  String? _idRegistradoNoHistorico;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    final id = args is String ? args : null;
+
+    if (id != null && id != _idRegistradoNoHistorico) {
+      _idRegistradoNoHistorico = id;
+      // Registra no histórico após o frame atual para não disparar notifyListeners durante o build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final provider = context.read<DobraduraProvider>();
+        if (provider.buscarPorId(id) != null) {
+          provider.registrarAcesso(id);
+        }
+      });
+    }
+  }
 
   void _voltarParaMenu(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
@@ -25,9 +50,18 @@ class DobraduraScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<DobraduraProvider>();
     final args = ModalRoute.of(context)?.settings.arguments;
     final id = args is String ? args : null;
-    final dobradura = id != null ? _repository.buscarPorId(id) : null;
+
+    if (provider.carregando) {
+      return const Scaffold(
+        appBar: AppHeader(titulo: 'Dobradura'),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final dobradura = id != null ? provider.buscarPorId(id) : null;
 
     if (dobradura == null) {
       return Scaffold(

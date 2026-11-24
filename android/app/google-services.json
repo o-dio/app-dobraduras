@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "979456577022",
+    "project_id": "app-dobraduras",
+    "storage_bucket": "app-dobraduras.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979456577022:android:d12317086d0aeca22744af",
+        "android_client_info": {
+          "package_name": "com.example.appdobraduras"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpy7ijyiCQzD9W5NTuSJUVgzZrZ6p53TU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

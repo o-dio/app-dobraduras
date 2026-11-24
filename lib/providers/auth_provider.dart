@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../repositories/auth_repository.dart';
 
@@ -6,11 +7,20 @@ import '../repositories/auth_repository.dart';
 /// Usa `ChangeNotifier` para notificar automaticamente qualquer widget
 /// que esteja observando `isAdmin` quando houver login ou logout.
 class AuthProvider extends ChangeNotifier {
-  AuthProvider(this._repository);
+  AuthProvider(this._repository) : _isAdmin = _repository.estaAutenticado {
+    // Mantém o estado sincronizado com a sessão real do Firebase Auth
+    _assinaturaAuth = _repository.estadoAutenticacao.listen((autenticado) {
+      if (_isAdmin != autenticado) {
+        _isAdmin = autenticado;
+        notifyListeners();
+      }
+    });
+  }
 
   final AuthRepository _repository;
+  late final StreamSubscription<bool> _assinaturaAuth;
 
-  bool _isAdmin = false;
+  bool _isAdmin;
   bool _carregando = false;
 
   /// Indica se o usuário atual está autenticado como administrador.
@@ -37,9 +47,16 @@ class AuthProvider extends ChangeNotifier {
   }
 
   /// Encerra a sessão do administrador e retorna ao modo usuário comum.
-  void logout() {
+  Future<void> logout() async {
     if (!_isAdmin) return;
+    await _repository.sair();
     _isAdmin = false;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _assinaturaAuth.cancel();
+    super.dispose();
   }
 }

@@ -1,22 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 /// Repositório responsável pela autenticação do administrador.
 ///
-/// Atualmente usa credenciais mockadas em memória. No futuro, esta classe
-/// será conectada ao Firebase Auth sem necessidade de alterar as telas.
+/// Conectado ao Firebase Auth (método E-mail/Senha).
 class AuthRepository {
-  static const String _emailAdmin = 'admin@dobraduras.com';
-  static const String _senhaAdmin = 'admin123';
+  AuthRepository({FirebaseAuth? firebaseAuth})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
-  /// Valida as credenciais informadas.
+  final FirebaseAuth _firebaseAuth;
+
+  /// Indica se já existe um administrador autenticado na sessão atual.
+  bool get estaAutenticado => _firebaseAuth.currentUser != null;
+
+  /// Stream que emite `true` quando há usuário autenticado e `false` ao sair.
+  Stream<bool> get estadoAutenticacao =>
+      _firebaseAuth.authStateChanges().map((user) => user != null);
+
+  /// Valida as credenciais informadas no Firebase Auth.
   ///
   /// Retorna `true` se o login for válido e `false` caso contrário.
-  /// Assinatura assíncrona (`Future`) já preparada para integração com Firebase.
   Future<bool> autenticar({
     required String email,
     required String senha,
   }) async {
-    // Simula uma pequena latência de rede (como ocorrerá no Firebase Auth)
-    await Future.delayed(const Duration(milliseconds: 400));
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: senha,
+      );
+      return true;
+    } on FirebaseAuthException {
+      return false;
+    }
+  }
 
-    return email.trim().toLowerCase() == _emailAdmin && senha == _senhaAdmin;
+  /// Encerra a sessão do administrador no Firebase Auth.
+  Future<void> sair() async {
+    await _firebaseAuth.signOut();
   }
 }
