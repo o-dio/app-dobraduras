@@ -80,20 +80,20 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAdmin = context.watch<AuthProvider>().isAdmin;
-    final colorScheme = Theme.of(context).colorScheme;
-
     return AppBar(
-      // 1. Logo do app: clique simples navega/recarrega; duplo clique na /home abre login ou logout
-      leading: Tooltip(
-        message: 'Ir para o início',
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: () => _aoClicarNoLogo(context),
-          onDoubleTap: () => _aoDarDuploCliqueNoLogo(context),
-          child: Image.asset(
-            'assets/images/logo_ultra_dahora.png',
-            
+      leadingWidth: 68,
+      // 1. Logo do app: clique simples navega; duplo clique na /home abre login ou logout
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 12),
+        child: Tooltip(
+          message: 'Ir para o início',
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: () => _aoClicarNoLogo(context),
+            onDoubleTap: () => _aoDarDuploCliqueNoLogo(context),
+            child: Image.asset(
+              'assets/images/logo_ultra_dahora.png',
+            ),
           ),
         ),
       ),

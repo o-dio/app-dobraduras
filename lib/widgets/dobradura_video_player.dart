@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,6 +19,8 @@ class _DobraduraVideoPlayerState extends State<DobraduraVideoPlayer> {
   VideoPlayerController? _controller;
   bool _carregando = true;
   bool _erroAoCarregar = false;
+  bool _mostrarControles = true;
+  Timer? _timerOcultar;
 
   @override
   void initState() {
@@ -60,8 +63,25 @@ class _DobraduraVideoPlayerState extends State<DobraduraVideoPlayer> {
 
   @override
   void dispose() {
+    _timerOcultar?.cancel();
     _controller?.dispose();
     super.dispose();
+  }
+
+  void _agendarOcultarControles() {
+    _timerOcultar?.cancel();
+    _timerOcultar = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      if (_controller?.value.isPlaying ?? false) {
+        setState(() => _mostrarControles = false);
+      }
+    });
+  }
+
+  void _aoTocarNoVideo() {
+    if (!(_controller?.value.isPlaying ?? false)) return;
+    setState(() => _mostrarControles = !_mostrarControles);
+    if (_mostrarControles) _agendarOcultarControles();
   }
 
   void _alternarReproducao() {
@@ -71,8 +91,11 @@ class _DobraduraVideoPlayerState extends State<DobraduraVideoPlayer> {
     setState(() {
       if (controller.value.isPlaying) {
         controller.pause();
+        _timerOcultar?.cancel();
+        _mostrarControles = true;
       } else {
         controller.play();
+        _agendarOcultarControles();
       }
     });
   }
@@ -110,36 +133,46 @@ class _DobraduraVideoPlayerState extends State<DobraduraVideoPlayer> {
     final controller = _controller!;
     final tocando = controller.value.isPlaying;
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          color: Colors.black,
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: controller.value.aspectRatio,
-              child: VideoPlayer(controller),
+    return GestureDetector(
+      onTap: _aoTocarNoVideo,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            color: Colors.black,
+            child: Center(
+              child: AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: VideoPlayer(controller),
+              ),
             ),
           ),
-        ),
-        // Botão central de Play / Pause
-        IconButton.filledTonal(
-          iconSize: 40,
-          icon: Icon(tocando ? Icons.pause : Icons.play_arrow),
-          tooltip: tocando ? 'Pausar' : 'Reproduzir',
-          onPressed: _alternarReproducao,
-        ),
-        // Barra de progresso interativa na base
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: VideoProgressIndicator(
-            controller,
-            allowScrubbing: true,
+          // Botão central de Play / Pause com fade automático
+          IgnorePointer(
+            ignoring: !_mostrarControles,
+            child: AnimatedOpacity(
+              opacity: _mostrarControles ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: IconButton.filledTonal(
+                iconSize: 40,
+                icon: Icon(tocando ? Icons.pause : Icons.play_arrow),
+                tooltip: tocando ? 'Pausar' : 'Reproduzir',
+                onPressed: _alternarReproducao,
+              ),
+            ),
           ),
-        ),
-      ],
+          // Barra de progresso interativa na base
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: VideoProgressIndicator(
+              controller,
+              allowScrubbing: true,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
