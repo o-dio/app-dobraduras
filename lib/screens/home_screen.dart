@@ -97,42 +97,47 @@ class HomeScreen extends StatelessWidget {
                 final historico = provider.historico;
                 final galeriaPorTipo = provider.agrupadasPorTipo;
 
-                return ListView(
-                  padding: const EdgeInsets.only(bottom: 24),
-                  children: [
-                    DobraduraCarrossel(
-                      titulo: 'Histórico',
-                      dobraduras: historico,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Galeria',
-                            style: textTheme.titleLarge,
-                          ),
-                          if (isAdmin)
-                            IconButton.filledTonal(
-                              onPressed: () => Navigator.pushNamed(
-                                context,
-                                '/admin/dobradura',
-                              ),
-                              icon: const Icon(Icons.add),
-                              tooltip: 'Adicionar dobradura',
-                              visualDensity: VisualDensity.compact,
-                            ),
-                        ],
-                      ),
-                    ),
-                    for (final entry in galeriaPorTipo.entries)
+                return RefreshIndicator(
+                  onRefresh: () => provider.carregarDobraduras(silencioso: true),
+                  child: ListView(
+                    // Garante que o gesto de puxar funcione mesmo com poucos itens na tela
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: 24),
+                    children: [
                       DobraduraCarrossel(
-                        titulo: entry.key,
-                        dobraduras: entry.value,
-                        estiloTitulo: textTheme.titleMedium,
+                        titulo: 'Histórico',
+                        dobraduras: historico,
                       ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Galeria',
+                              style: textTheme.titleLarge,
+                            ),
+                            if (isAdmin)
+                              IconButton.filledTonal(
+                                onPressed: () => Navigator.pushNamed(
+                                  context,
+                                  '/admin/dobradura',
+                                ),
+                                icon: const Icon(Icons.add),
+                                tooltip: 'Adicionar dobradura',
+                                visualDensity: VisualDensity.compact,
+                              ),
+                          ],
+                        ),
+                      ),
+                      for (final entry in galeriaPorTipo.entries)
+                        DobraduraCarrossel(
+                          titulo: entry.key,
+                          dobraduras: entry.value,
+                          estiloTitulo: textTheme.titleMedium,
+                        ),
+                    ],
+                  ),
                 );
               },
             ),

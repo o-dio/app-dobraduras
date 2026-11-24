@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-import '../providers/dobradura_provider.dart';
 
 /// Cabeçalho compartilhado por todas as páginas internas do aplicativo.
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -36,13 +35,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void _aoClicarNoLogo(BuildContext context) {
-    // Atualiza o catálogo do Firestore ao voltar ou recarregar o início
-    context.read<DobraduraProvider>().carregarDobraduras();
-
-    if (_estaNaHome(context)) {
-      // Na /home, clique simples recarrega a página inicial
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
+    if (!_estaNaHome(context)) {
       // Nas demais telas, volta para a /home limpando a pilha
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     }

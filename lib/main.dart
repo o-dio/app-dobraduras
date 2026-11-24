@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,6 +38,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'App Dobraduras',
+        // Permite arrastar/puxar com mouse e trackpad na Web (inclusive para RefreshIndicator e carrosséis)
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.trackpad,
+          },
+        ),
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
                seedColor: Color(0xFFD6AF55),

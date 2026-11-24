@@ -59,8 +59,13 @@ class DobraduraProvider extends ChangeNotifier {
   }
 
   /// Busca o catálogo atualizado no Firestore e armazena em memória.
-  Future<void> carregarDobraduras() async {
-    _carregando = true;
+  ///
+  /// Quando [silencioso] é `true` (ex.: pull-to-refresh), mantém a lista atual
+  /// visível enquanto o indicador de atualização gira no topo da tela.
+  Future<void> carregarDobraduras({bool silencioso = false}) async {
+    if (!silencioso) {
+      _carregando = true;
+    }
     _erro = null;
     notifyListeners();
 
