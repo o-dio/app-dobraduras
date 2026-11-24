@@ -80,6 +80,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return AppBar(
       leadingWidth: 68,
       // 1. Logo do app: clique simples navega; duplo clique na /home abre login ou logout
@@ -102,6 +104,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         titulo,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
+        style: textTheme.bodyLarge,
       ),
       // 3. Ação de pesquisa (oculta quando já estiver na tela /busca)
       actions: [
